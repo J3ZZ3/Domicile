@@ -1,0 +1,827 @@
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+h3 {
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+p {
+    color: #f0f0f0;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.input-container {
+    flex-basis: 70%;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-basis: 30%;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #c0392b;
+    outline: none;
+}
+
+button {
+    padding: 12px;
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #a93226;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.paypal-button-container {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .input-container {
+        flex-direction: column;
+    }
+
+    input {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+
+.booking-layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    background-image: url('../../assets/bookingform.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.booking-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.booking-page {
+    flex: 1;
+    min-height: 100vh;
+    padding: 0;
+    overflow-y: auto;
+    margin-right: 400px;
+    background: transparent;
+    position: relative;
+    z-index: 2;
+}
+
+.back-button {
+    position: absolute;
+    top: -.5rem;
+    left: -8.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1rem;
+    padding: 0.8rem 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    z-index: 10;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-5px);
+}
+
+.booking-container {
+    max-width: 1400px;
+    margin: 3rem auto 3rem;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.booking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+}
+
+.room-summary {
+    padding: 2.5rem;
+}
+
+.room-image {
+    width: 100%;
+    height: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.room-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.room-image:hover img {
+    transform: scale(1.05);
+}
+
+.summary-content {
+    padding: 2.5rem;
+    
+}
+
+.summary-content h2 {
+    margin-left: 70px;
+    color: #fff;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.summary-details {
+    background: rgba(0, 123, 247, 0);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 2rem;
+    color: #fff;
+}
+
+.summary-details h3 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.room-type {
+    color: #fff;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 1.1rem;
+}
+
+.summary-item.total {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: #8B0000;
+    border-bottom: none;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.room-features {
+    background: rgba(248, 249, 250, 0);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.room-features h4 {
+    color: #fff;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.room-features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #fff;
+
+}
+
+.room-features li {
+    padding: 0.5rem 0;
+    color: #fff;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.booking-form-container {
+    padding: 2.5rem;
+    border-radius: 15px;
+}
+
+.booking-form-container h2 {
+    color: #fff;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+    
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon svg {
+    position: absolute;
+    left: 1.5rem;
+    color: #8B0000;
+    font-size: 1.8rem;
+    pointer-events: none;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 4rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.input-with-icon input:focus {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(139, 0, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+    outline: none;
+}
+
+.dates-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+    margin-left: 85px;
+    color: #000000;
+    cursor: pointer;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    padding: 0.2rem;
+    filter: invert(0.4);
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+    scale: 1.1;
+}
+
+.form-group input[type="date"]:focus {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(139, 0, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+    outline: none;
+}
+
+textarea {
+    width: 270%;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    resize: vertical;
+    min-height: 120px;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+textarea:focus {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(139, 0, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+    outline: none;
+}
+
+.payment-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #eee;
+}
+
+.payment-section h3 {
+    color: #fff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+@media (max-width: 1200px) {
+    .booking-container {
+        margin: -2rem 2rem 2rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .booking-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .booking-container {
+        margin: -2rem 1rem 2rem;
+        overflow: visible;
+    }
+
+    .room-summary {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .booking-container {
+        margin: -1rem 1rem 1rem;
+        border-radius: 15px;
+    }
+
+    .room-summary, 
+    .booking-form-container {
+        padding: 1.5rem;
+    }
+
+    .dates-group {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .room-image {
+        height: 200px;
+    }
+
+    .form-group input[type="date"] {
+        padding: 0.8rem 0.8rem 0.8rem 2.8rem;
+        font-size: 1rem;
+    }
+
+    .input-with-icon svg {
+        font-size: 1.5rem;
+        left: 1.2rem;
+    }
+
+    .input-with-icon input {
+        padding: 0.8rem 0.8rem 0.8rem 3.5rem;
+    }
+
+    .back-button {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+
+.payment-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    padding: 2rem;
+    overflow-y: auto;
+    z-index: 2;
+}
+
+.payment-summary {
+    position: sticky;
+    top: 2rem;
+    
+}
+
+.payment-summary h3 {
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.summary-items {
+    background: rgba(248, 249, 250, 0.089);
+    padding: 1.5rem;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    color: #ffffff;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item.total {
+    font-weight: bold;
+    color: #8B0000;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #eee;
+}
+
+.payment-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #eee;
+}
+
+@media (max-width: 1200px) {
+    .booking-page {
+        margin-right: 350px;
+    }
+    
+    .payment-sidebar {
+        width: 350px;
+    }
+}
+
+@media (max-width: 992px) {
+    .booking-layout {
+        flex-direction: column;
+    }
+    
+    .booking-page {
+        margin-right: 0;
+        margin-bottom: 400px;
+    }
+    
+    .payment-sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.85);
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-page {
+        margin-bottom: 450px;
+    }
+    
+    .payment-sidebar {
+        padding: 1rem;
+    }
+    
+    .summary-items {
+        padding: 1rem;
+    }
+}
+
+.form-group.personal-info {
+    width: 270%;
+    margin-bottom: 2rem;
+}
+
+.form-group.personal-info .input-with-icon {
+    width: 100%;
+}
+
+.dates-group .form-group {
+    width: 100%;
+}
+
+@media (max-width: 1200px) {
+    .form-group.personal-info {
+        width: 200%;
+    }
+}
+
+@media (max-width: 992px) {
+    .form-group.personal-info {
+        width: 150%;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-group.personal-info {
+        width: 100%;
+    }
+}
+
+.paypal-button-container {
+    margin-top: 1.5rem;
+    background: rgb(255, 255, 255, 0);
+    padding: 1rem;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.payment-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.paypal-buttons {
+    z-index: 10;
+    position: relative;
+}
+
+.current-bookings-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0);
+    border-radius: 15px;
+}
+
+.current-bookings-section h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.booking-date-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.calendar-icon {
+    color: #8B0000;
+    font-size: 1.2rem;
+}
+
+.booking-status {
+    margin-left: auto;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    background: rgba(139, 0, 0, 0.2);
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .current-bookings-section {
+        padding: 1rem;
+    }
+
+    .booking-date-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .booking-status {
+        margin: 0;
+    }
+}
+
+.room-additional-info {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.room-additional-info h4 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #fff;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.info-icon {
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.room-policies {
+    margin-top: 1.5rem;
+}
+
+.room-policies ul {
+    list-style: none;
+    padding: 0;
+}
+
+.room-policies li {
+    color: #fff;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.room-policies li::before {
+    content: "•";
+    color: #8B0000;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-item {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+.paypal-error-notice {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+    color: #856404;
+}
+
+.paypal-error-notice ul {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.paypal-error-notice li {
+    margin: 0.25rem 0;
+}
+
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.loading-icon {
+  font-size: 2.5rem;
+  color: #007bff;
+  animation: spin 1s linear infinite;
+}
+
+.processing-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.processing-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,27 @@
+.booking-status-container {
+    padding: 30px;
+    background-color: #ffffff; /* White background for elegance */
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin: auto;
+}
+
+.booking-status-container h2 {
+    color: #c0392b; /* Elegant red for headings */
+    font-family: 'Georgia', serif; /* Sophisticated font */
+}
+
+.booking-status-container p {
+    color: #6c757d; /* Grey text for secondary information */
+    margin: 5px 0;
+}
+
+@media (max-width: 600px) {
+    .booking-status-container {
+        padding: 20px; /* Reduce padding on small screens */
+    }
+    h2 {
+        font-size: 1.5rem; /* Smaller heading on mobile */
+    }
+} 

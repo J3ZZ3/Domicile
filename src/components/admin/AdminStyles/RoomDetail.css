@@ -1,0 +1,166 @@
+.room-detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.room-detail-content {
+  background: rgba(26, 26, 26, 0.95);
+  border-radius: 15px;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(192, 57, 43, 0.8);
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #c0392b;
+  transform: scale(1.1);
+}
+
+.room-detail-image-container {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.room-detail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.room-detail-info {
+  padding: 2rem;
+  color: #ffffff;
+}
+
+.room-detail-info h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.detail-section {
+  margin-bottom: 2rem;
+}
+
+.detail-section h3 {
+  color: #c0392b;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.amenities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.amenity-tag {
+  background-color: rgba(192, 57, 43, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(192, 57, 43, 0.3);
+}
+
+.status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.status.available {
+  background-color: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.status.occupied {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.room-detail-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.edit-button, .delete-button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  color: white;
+}
+
+.edit-button {
+  background-color: #c0392b;
+}
+
+.edit-button:hover {
+  background-color: #a93226;
+  transform: translateY(-2px);
+}
+
+.delete-button {
+  background-color: #34495e;
+}
+
+.delete-button:hover {
+  background-color: #2c3e50;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .room-detail-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .room-detail-image-container {
+    height: 200px;
+  }
+
+  .room-detail-info {
+    padding: 1.5rem;
+  }
+} 

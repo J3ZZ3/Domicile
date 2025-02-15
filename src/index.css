@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Dark theme for SweetAlert2 */
+.dark-theme-popup {
+  background-color: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark-theme-button {
+  background-color: #c0392b !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dark-theme-button:hover {
+  background-color: #a93226 !important;
+  transform: translateY(-2px);
+}
+
+.dark-theme-title {
+  color: white !important;
+}
+
+.dark-theme-content {
+  color: #cccccc !important;
+}
+
+/* Style for the backdrop */
+.swal2-popup {
+  font-size: 1rem !important;
+}
+
+.swal2-backdrop-show {
+  background: rgba(0, 0, 0, 0.8) !important;
+}

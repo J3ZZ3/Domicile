@@ -1,0 +1,183 @@
+.add-room-page {
+    min-height: 100vh;
+    background-color: #1a1a1a;
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.add-room-container {
+    min-height: 100vh;
+    width: 100%;
+    padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    color: white;
+    position: relative;
+}
+
+.add-room-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.add-room-form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.add-room-form input,
+.add-room-form textarea,
+.add-room-form select {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.add-room-form input:focus,
+.add-room-form textarea:focus,
+.add-room-form select:focus {
+    outline: none;
+    border-color: #c0392b;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.add-room-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.add-room-form input[type="file"] {
+    padding: 10px;
+    background-color: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+}
+
+.add-room-form input[type="file"]:hover {
+    border-color: #c0392b;
+}
+
+.add-room-form button {
+    background-color: #c0392b;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.add-room-form button:hover {
+    background-color: #a93226;
+    transform: translateY(-2px);
+}
+
+.add-room-form button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.add-room-form select option {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .add-room-container {
+        padding: 1.5rem;
+    }
+    
+    .add-room-form {
+        padding: 0;
+    }
+}
+
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #c0392b;
+}
+
+.update-room-container h2 {
+    text-align: left;
+    margin: 3.5rem 0 2rem 0;
+    color: #ffffff;
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.update-room-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* SweetAlert2 Dark Theme Customization */
+.swal-dark {
+  background-color: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.swal-title {
+  color: #ffffff !important;
+}
+
+.swal-text {
+  color: #ffffff !important;
+}
+
+.swal-button {
+  background-color: #c0392b !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.swal-button:hover {
+  background-color: #a93226 !important;
+}

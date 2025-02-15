@@ -1,0 +1,160 @@
+.add-admin {
+    display: flex;
+    background-image: url('../../assets/admindashboard.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.overlay-aa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    text-align: center;
+    padding: clamp(1rem, 5vw, 2rem);
+    height: auto;
+    width: 100%;
+}
+
+.form-aa {
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    padding: 1rem;
+}
+
+.form-aa h1 {
+    color: white;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 1.5rem;
+}
+
+.add-admin-page {
+    min-height: 100vh;
+    background-color: #1a1a1a;
+    padding: clamp(60px, 10vh, 80px) 0 2rem;
+    margin: 0;
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.add-admin-container {
+    width: min(100% - 2rem, 600px);
+    margin: 2rem auto;
+    padding: clamp(1rem, 3vw, 2rem);
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+}
+
+.add-admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.add-admin-form input {
+    width: 100%;
+    padding: clamp(0.75rem, 2vw, 1rem);
+    margin-bottom: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    transition: all 0.3s ease;
+}
+
+.add-admin-form input:focus {
+    outline: none;
+    border-color: #c0392b;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.add-admin-form button {
+    background-color: #c0392b;
+    color: white;
+    padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem);
+    border: none;
+    border-radius: 8px;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.add-admin-form button:hover {
+    background-color: #a93226;
+    transform: translateY(-2px);
+}
+
+.add-admin-form button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    margin-top: 0.5rem;
+}
+
+/* Tablet styles */
+@media (min-width: 481px) and (max-width: 768px) {
+    .add-admin-container {
+        margin: 1.5rem auto;
+        width: min(100% - 3rem, 500px);
+    }
+    
+    .form-aa {
+        padding: 1.5rem;
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 480px) {
+    .add-admin-container {
+        margin: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+    
+    .form-aa {
+        padding: 0.5rem;
+    }
+    
+    .add-admin-form input,
+    .add-admin-form button {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+    
+    .overlay-aa {
+        padding: 1rem;
+    }
+}
+
+/* Larger screens */
+@media (min-width: 1200px) {
+    .add-admin-container {
+        max-width: 700px;
+    }
+    
+    .form-aa {
+        max-width: 600px;
+    }
+}

@@ -1,0 +1,164 @@
+.room-filters {
+    position: relative;
+    z-index: 100;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.filter-toggle:hover {
+    background: #333;
+    transform: translateY(-2px);
+}
+
+.filters-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 100%;
+    transform: translateX(-50%) translateY(-10px);
+    width: 1200px;
+    background: rgb(189, 189, 189);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.filters-panel.open {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.filters-header h3 {
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.clear-filters {
+    background: none;
+    border: none;
+    color: #1a1a1a;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+}
+
+.filter-section h4 {
+    color: #1a1a1a;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+}
+
+.price-range {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.price-range input {
+    width: 100px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+    color: #333;
+}
+
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+}
+
+.amenity-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.amenity-checkbox.selected {
+    background: #1a1a1a;
+    color: white;
+    border-color: #1a1a1a;
+}
+
+.amenity-checkbox input {
+    display: none;
+}
+
+.amenity-icon {
+    font-size: 1.1rem;
+}
+
+.availability-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+}
+
+.availability-toggle input {
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 768px) {
+    .filters-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        overflow-y: auto;
+        transform: translateX(0) translateY(-10px);
+    }
+
+    .filters-panel.open {
+        transform: translateX(0) translateY(0);
+    }
+
+    .amenities-grid {
+        grid-template-columns: 1fr;
+    }
+} 

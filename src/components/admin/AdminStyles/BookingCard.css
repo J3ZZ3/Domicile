@@ -1,0 +1,125 @@
+.booking-card {
+    position: relative;
+    height: 200px;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.4);
+}
+
+.booking-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.5));
+    pointer-events: none;
+}
+
+.booking-card-header {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    z-index: 1;
+}
+
+.status-badge, .payment-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
+    font-family: 'Poppins', Arial, sans-serif;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    height: fit-content;
+}
+
+.status-badge {
+    position: absolute;
+    left: 0;
+    top: -20px;
+    height: 5px;
+}
+
+.payment-badge {
+    position: absolute;
+    right: 0;
+    top: -5px;
+    height: 15px;
+}
+
+.status-badge.pending {
+    background: rgba(241, 196, 15, 0.3);
+    color: #f1c40f;
+}
+
+.status-badge.approved {
+    background: rgba(46, 204, 113, 0.3);
+    color: #2ecc71;
+}
+
+.status-badge.cancelled {
+    background: rgba(231, 76, 60, 0.3);
+    color: #e74c3c;
+}
+
+.payment-badge.paid {
+    background: rgba(46, 204, 113, 0.3);
+    color: #2ecc71;
+}
+
+.payment-badge.pending {
+    background: rgba(241, 196, 15, 0.3);
+    color: #f1c40f;
+}
+
+.payment-badge.failed {
+    background: rgba(231, 76, 60, 0.3);
+    color: #e74c3c;
+}
+
+.booking-card-content {
+    background-color: rgba(0, 0, 0, 0);
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #ffffff;
+}
+
+.room-name {
+    color: #ffffff;
+    margin-top: 90px;
+    font-size: 2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .booking-card {
+        height: 180px;
+    }
+    
+    .status-badge, .payment-badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .room-name {
+        font-size: 1.1rem;
+    }
+} 

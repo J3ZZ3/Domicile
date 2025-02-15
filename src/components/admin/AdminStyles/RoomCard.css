@@ -1,0 +1,181 @@
+.room-details {
+        margin: 20px;
+        gap: 100px;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+        background-color: #007bff3b;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+
+.edit-button {
+    margin: 20px;
+    gap: 100px;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background-color: orangered;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .edit-button:hover {
+    background-color: rgb(179, 48, 0);
+  }
+
+  .delete-button {
+    margin: 20px;
+    gap: 100px;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .delete-button:hover {
+    background-color: darkred;
+  }
+
+.room-card {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.room-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(192, 57, 43, 0.3);
+}
+
+.room-title {
+    font-size: 1.8rem; /* Title size */
+    color: #c0392b; /* Red color for title */
+    margin-bottom: 10px; /* Space below title */
+}
+
+.room-image {
+    width: 100%; /* Full width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Rounded corners for image */
+    margin-bottom: 10px; /* Space below image */
+}
+
+.room-description,
+.room-amenities,
+.room-price,
+.room-status {
+    font-size: 1rem; /* Description size */
+    color: #666; /* Grey color for text */
+    margin: 5px 0; /* Space between text elements */
+}
+
+.book-button {
+    background-color: #c0392b; /* Red background for button */
+    color: #fff; /* White text */
+    padding: 10px 15px; /* Padding for button */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.book-button:hover {
+    background-color: #a93226; /* Darker red on hover */
+}
+
+.booked-message {
+    color: #666; /* Grey color for booked message */
+}
+
+.admin-room-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  width: 300px;
+  margin: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-room-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.admin-room-image-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.admin-room-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.admin-room-card:hover .admin-room-image {
+  transform: scale(1.1);
+}
+
+.admin-room-info {
+  padding: 1rem;
+  text-align: center;
+}
+
+.admin-room-name {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .admin-room-card {
+    width: calc(100% - 2rem);
+  }
+}
+
+.room-status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.room-status.available {
+  background-color: #27ae60;
+  color: white;
+}
+
+.room-status.unavailable {
+  background-color: #c0392b;
+  color: white;
+}
+
+.room-status.maintenance {
+  background-color: #f39c12;
+  color: white;
+}

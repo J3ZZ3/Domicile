@@ -1,0 +1,146 @@
+.edit-admin-page {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  padding: 80px 0 2rem 0;
+  margin: 0;
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.edit-admin-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-admin-container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ffffff;
+  font-size: 2.2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.edit-admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 1rem;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.edit-admin-form input {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.edit-admin-form input:focus {
+  outline: none;
+  border-color: #c0392b;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.disabled-input {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.helper-text {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.25rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.button-group button {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-button {
+  background-color: #c0392b;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #a93226;
+  transform: translateY(-2px);
+}
+
+.cancel-button {
+  background-color: #34495e;
+  color: white;
+  margin-left: 10px;
+}
+
+.cancel-button:hover {
+  background-color: #2c3e50;
+  transform: translateY(-2px);
+}
+
+.button-group button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading {
+  text-align: center;
+  color: white;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .edit-admin-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .button-group button {
+    width: 100%;
+  }
+} 

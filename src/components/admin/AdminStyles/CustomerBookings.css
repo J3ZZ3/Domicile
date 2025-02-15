@@ -1,0 +1,274 @@
+/* General Container */
+.customer-bookings-cb {
+  background-color: #2b2f42;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+/* Overlay for overall styling */
+.overlay-cb {
+  max-width: 900px;
+  width: 100%;
+  background-color: #00000056;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+
+/* Booking Card */
+.booking-card-cb {
+  background-color: #ececec63;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.booking-card-cb:hover {
+  transform: scale(1.02);
+}
+
+/* Text Content */
+.booking-card-cb p {
+  font-size: 0.95rem;
+  color: #f5f5f5;
+  margin: 0.4rem 0;
+}
+
+.booking-card-cb p strong {
+  color: #2b2f42;
+}
+
+.status-buttons-cb {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+
+/* Buttons */
+button {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.approve-cb {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.approve-cb:hover {
+  background-color: #218838;
+  box-shadow: 0px 4px 8px rgba(40, 167, 69, 0.2);
+}
+
+.reject-cb {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.reject-cb:hover {
+  background-color: #c82333;
+  box-shadow: 0px 4px 8px rgba(220, 53, 69, 0.2);
+}
+
+.customer-bookings-page {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  padding-top: 80px;
+}
+
+.customer-bookings-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.customer-bookings-container h1 {
+  color: white;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.month-group {
+  margin-bottom: 3rem;
+}
+
+.month-header {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.bookings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.booking-card {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+}
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.booking-header h3 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.status.confirmed {
+  background-color: #27ae60;
+}
+
+.status.pending {
+  background-color: #f39c12;
+}
+
+.status.cancelled {
+  background-color: #c0392b;
+}
+
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.label {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.loading {
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.no-bookings {
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.bookings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.delete-all-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-all-button:hover:not(:disabled) {
+  background-color: #a93226;
+  transform: translateY(-2px);
+}
+
+.delete-all-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+.delete-all-button ion-icon {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .customer-bookings-container {
+    padding: 1rem;
+  }
+  
+  .bookings-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .booking-card {
+    margin-bottom: 1rem;
+  }
+
+  .month-header {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .bookings-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .delete-all-button {
+    width: 100%;
+    justify-content: center;
+  }
+}

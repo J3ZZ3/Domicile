@@ -1,0 +1,153 @@
+.amenities-page {
+  min-height: 100vh;
+  background: url('../../assets/amenities.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.amenities-content {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 5rem;
+}
+
+.amenities-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(to right, #1a1a1a, #333);
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.amenities-header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.amenities-header p {
+  font-size: 1.3rem;
+  color: #e0e0e0;
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.amenity-card {
+  background: rgba(255, 255, 255, 0);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #eee;
+  backdrop-filter: blur(5px);
+
+}
+
+.amenity-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  border-color: #1a1a1a;
+}
+
+.amenity-icon {
+  font-size: 2.8rem;
+  color: #1a1a1a;
+  margin-bottom: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.amenity-card:hover .amenity-icon {
+  transform: scale(1.1);
+}
+
+.amenity-card h3 {
+  color: #1a1a1a;
+  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.amenity-card p {
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.back-to-home {
+  position: fixed;
+  top: 2rem;
+  left: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: #8B0000;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-home:hover {
+  background: #a00000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .amenities-content {
+    padding: 1rem;
+  }
+  
+  .amenities-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+  }
+  
+  .amenities-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .amenities-header p {
+    font-size: 1.1rem;
+  }
+  
+  .amenities-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .amenity-card {
+    padding: 1.5rem;
+  }
+  
+  .amenity-icon {
+    font-size: 2.4rem;
+  }
+  
+  .amenity-card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .back-to-home {
+    top: 1rem;
+    left: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+} 

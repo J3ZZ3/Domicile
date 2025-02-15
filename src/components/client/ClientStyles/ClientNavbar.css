@@ -1,0 +1,219 @@
+.navbar {
+    background: linear-gradient(45deg, #8B0000, #c0392b);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: calc(100% - 4rem); /* Account for padding */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.app-name {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    padding-right: 2rem; /* Add padding instead of margin */
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-family: 'Poppins', Arial, sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 1rem;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.logout {
+    padding: 0.8rem 1.5rem;
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 1.1rem;
+}
+
+.logout:hover {
+    background: white;
+    color: #8B0000;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.logout-icon {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.logout-icon:hover {
+    transform: translateY(-2px);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-icon {
+    color: white;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-icon:hover {
+    transform: translateY(-2px);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-menu {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    min-width: 220px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    animation: dropdownFade 0.2s ease;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.2rem;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item svg {
+    font-size: 1.2rem;
+    margin-right: 0.8rem;
+    color: #666;
+}
+
+.dropdown-item:hover {
+    background: #f5f5f5;
+}
+
+.dropdown-item span {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 0.9rem;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #eee;
+    margin: 0.5rem 0;
+}
+
+.dropdown-item.logout {
+    color: #c0392b;
+}
+
+.dropdown-item.logout svg {
+    color: #c0392b;
+}
+
+.dropdown-item.logout:hover {
+    background: #fff5f5;
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar {
+        width: calc(100% - 2rem);
+        padding: 1rem;
+    }
+
+    .nav-links {
+        padding-right: 1rem;
+    }
+
+    .app-name {
+        font-size: 1.4rem;
+    }
+
+    .nav-link {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+
+    .profile-icon {
+        font-size: 2rem;
+    }
+
+    .dropdown-menu {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        border-radius: 15px 15px 0 0;
+        margin-top: 0;
+        animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+}
