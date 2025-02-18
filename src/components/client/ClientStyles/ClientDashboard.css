@@ -69,20 +69,22 @@ h1 {
 }
 
 .client-dashboard {
-    min-height: 300vh;
-    height: 100%;
+    min-height: 100%;
     background-image: url('../../assets/clientdashboard.jpg');
     background-size: cover;
     background-position: center;
-    position: absolute;
-    background-attachment: fixed; /* This prevents the background from shrinking */
-
+    background-attachment: fixed;
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .dashboard-content {
-    margin-top: 60px;
-    max-width: 1400px;
-    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    min-height: 100vh;
+    margin-top: 0;
     padding: 2rem;
 }
 

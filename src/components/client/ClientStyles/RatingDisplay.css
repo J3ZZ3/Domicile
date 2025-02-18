@@ -1,0 +1,43 @@
+.rating-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stars-display {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.rating-display.small .stars-display {
+  font-size: 1rem;
+}
+
+.rating-display.medium .stars-display {
+  font-size: 1.5rem;
+}
+
+.rating-display.large .stars-display {
+  font-size: 2rem;
+}
+
+.star-filled {
+  color: #ffd700;
+}
+
+.star-outline {
+  color: #ccc;
+}
+
+.rating-text {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.rating-display.small .rating-text {
+  font-size: 0.8rem;
+}
+
+.rating-display.large .rating-text {
+  font-size: 1rem;
+} 

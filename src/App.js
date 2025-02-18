@@ -1,27 +1,27 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
+import { AuthProvider } from "./context/AuthContext";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminLogin from "./components/admin/AdminLogin";
 import AddAdmin from "./components/admin/AddAdmin";
-import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute
-import ClientDashboard from "./components/client/ClientDashboard"; // Import ClientDashboard
-import ClientLogin from "./components/client/ClientLogin"; // Import ClientLogin
-import BookingHistory from "./components/client/BookingHistory"; // Import BookingHistory
-import BookingStatus from "./components/client/BookingStatus"; // Import BookingStatus
-import ClientRegister from "./components/client/ClientRegister"; // Import ClientRegister
-import HomePage from "./components/HomePage"; // Import HomePage
+import ProtectedRoute from "./components/ProtectedRoute";
+import ClientDashboard from "./components/client/ClientDashboard";
+import ClientLogin from "./components/client/ClientLogin";
+import BookingHistory from "./components/client/BookingHistory";
+import BookingStatus from "./components/client/BookingStatus";
+import ClientRegister from "./components/client/ClientRegister";
+import HomePage from "./components/HomePage";
 import AdminRegister from './components/admin/AdminRegister';
-import RoomDetail from "./components/admin/RoomDetail";  // Add this import
-import AddRoom from "./components/admin/AddRoom";  // Add this import
+import RoomDetail from "./components/admin/RoomDetail";
+import AddRoom from "./components/admin/AddRoom";
 import ManageAdmins from "./components/admin/ManageAdmins";
 import EditAdmin from "./components/admin/EditAdmin";
 import CustomerBookings from "./components/admin/CustomerBookings";
-import ClientRoomDetail from "./components/client/ClientRoomDetail"; // Add this import
-import BookingForm from "./components/client/BookingForm"; // Add this import
+import ClientRoomDetail from "./components/client/ClientRoomDetail";
+import BookingForm from "./components/client/BookingForm";
 import BookingDetail from './components/client/BookingDetail';
 import UpdateRoom from "./components/admin/UpdateRoom";
-import UserProfile from "./components/client/UserProfile"; // Add this import
+import UserProfile from "./components/client/UserProfile";
 import Amenities from "./components/client/Amenities";
 import HelpSupport from "./components/client/HelpSupport";
 import HotelDetails from "./components/client/HotelDetails";
@@ -36,7 +36,6 @@ const App = () => {
           <Route path="/admin-register" element={<AdminRegister />} />
           <Route
             path="/admin-dashboard"
-
             element={
               <ProtectedRoute>
                 <AdminDashboard />
@@ -96,7 +95,7 @@ const App = () => {
           <Route
             path="/booking-history"
             element={
-              <ProtectedRoute>style
+              <ProtectedRoute>
                 <BookingHistory />
               </ProtectedRoute>
             }
@@ -128,13 +127,27 @@ const App = () => {
           <Route 
             path="/booking/:roomId" 
             element={
-                <ProtectedRoute>
-                    <BookingForm />
-                </ProtectedRoute>
-            } 
+              <ProtectedRoute>
+                <BookingForm />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/booking-detail/:bookingId" element={<BookingDetail />} />
-          <Route path="/update-room/:roomId" element={<UpdateRoom />} />
+          <Route 
+            path="/booking-detail/:bookingId" 
+            element={
+              <ProtectedRoute>
+                <BookingDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route 
+            path="/update-room/:roomId" 
+            element={
+              <ProtectedRoute>
+                <UpdateRoom />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/profile"
             element={

@@ -1,69 +1,95 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth, db } from "../firebase/firebaseConfig";
-import { doc, getDoc, query, collection, where, getDocs } from "firebase/firestore";
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword
+} from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase/firebaseConfig';
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
-    const [userProfile, setUserProfile] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                setCurrentUser(user);
-                try {
-                    const usersRef = collection(db, 'users');
-                    const q = query(usersRef, where('uid', '==', user.uid));
-                    const querySnapshot = await getDocs(q);
-                    
-                    if (!querySnapshot.empty) {
-                        const userDoc = querySnapshot.docs[0];
-                        setUserProfile(userDoc.data());
-                    } else {
-                        console.log("No user profile found");
-                        setUserProfile(null);
-                    }
-                } catch (error) {
-                    console.error("Error fetching user profile:", error);
-                    setUserProfile(null);
-                }
-            } else {
-                setCurrentUser(null);
-                setUserProfile(null);
-            }
-            setLoading(false);
-        });
+export function AuthProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const auth = getAuth();
 
-        return () => unsubscribe();
-    }, []);
+  async function signup(email, password, userData) {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-    const login = () => {
-        setIsAuthenticated(true);
-    };
+      // Create user profile in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        ...userData,
+        createdAt: new Date().toISOString()
+      });
 
-    const logout = () => {
-        setIsAuthenticated(false);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function login(email, password) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      return userCredential.user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  function logout() {
+    return signOut(auth);
+  }
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          // Get user profile from Firestore
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            setCurrentUser({
+              ...user,
+              ...userDoc.data()
+            });
+          } else {
+            // If no profile exists, just use the auth user data
+            setCurrentUser(user);
+          }
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+          setCurrentUser(user);
+        }
+      } else {
         setCurrentUser(null);
-        setUserProfile(null);
-    };
+      }
+      setLoading(false);
+    });
 
-    return (
-        <AuthContext.Provider value={{ 
-            currentUser, 
-            userProfile, 
-            isAuthenticated,
-            loading,
-            login,
-            logout
-        }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+    return unsubscribe;
+  }, []);
 
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
+  const value = {
+    currentUser,
+    login,
+    signup,
+    logout,
+    loading
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+}

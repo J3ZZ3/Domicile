@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import "./AdminStyles/AddAdmin.css";
 import AdminNavbar from "./AdminNavbar";
 import Swal from "sweetalert2";
@@ -14,7 +14,7 @@ const AddAdmin = () => {
     confirmPassword: "",
     firstName: "",
     lastName: "",
-    phoneNumber: ""
+    phoneNumber: "",
   });
   const [error, setError] = useState(null);
 
@@ -45,13 +45,14 @@ const AddAdmin = () => {
       );
       const user = userCredential.user;
 
-      await addDoc(collection(db, "admins"), {
+      await setDoc(doc(db, "admins", user.uid), {
         uid: user.uid,
         email: formData.email,
         firstName: formData.firstName,
         lastName: formData.lastName,
         phoneNumber: formData.phoneNumber,
         isAdmin: true,
+        status: "active",
         createdAt: new Date().toISOString()
       });
 
@@ -72,7 +73,7 @@ const AddAdmin = () => {
         confirmPassword: "",
         firstName: "",
         lastName: "",
-        phoneNumber: ""
+        phoneNumber: "",
       });
     } catch (err) {
       setError(err.message);
@@ -152,6 +153,7 @@ const AddAdmin = () => {
               onChange={handleChange}
               placeholder="Enter password"
               required
+              minLength="6"
             />
           </div>
 
@@ -164,6 +166,7 @@ const AddAdmin = () => {
               onChange={handleChange}
               placeholder="Confirm password"
               required
+              minLength="6"
             />
           </div>
 

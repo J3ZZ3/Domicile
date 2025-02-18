@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase/firebaseConfig';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, addDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { IoCalendar, IoPersonCircle, IoHome, IoCall, IoArrowBack, IoPeople, IoBed, IoExpand, IoEye, IoWallet, IoReload } from 'react-icons/io5';
 import './ClientStyles/BookingDetail.css';
+import RatingForm from './common/RatingForm';
+import Swal from 'sweetalert2';
 
 const InfoItem = ({ icon: Icon, label, value }) => (
   <div className="info-item">
@@ -20,24 +22,44 @@ const BookingDetail = () => {
   const navigate = useNavigate();
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showRatingForm, setShowRatingForm] = useState(false);
+  const [hasRated, setHasRated] = useState(false);
+  const [existingRating, setExistingRating] = useState(null);
 
   useEffect(() => {
-    const fetchBookingAndRoom = async () => {
+    const fetchBookingAndRating = async () => {
       try {
         const bookingDoc = await getDoc(doc(db, 'bookings', bookingId));
         if (bookingDoc.exists()) {
           const bookingData = bookingDoc.data();
           
-          // Fetch room details to get the image
-          const roomDoc = await getDoc(doc(db, 'rooms', bookingData.roomId));
-          const roomData = roomDoc.exists() ? roomDoc.data() : null;
-          
-          setBooking({
+          let finalBookingData = {
             id: bookingDoc.id,
             ...bookingData,
-            roomImage: roomData?.images?.[0] || roomData?.image || null, // Try both image formats
-            roomName: bookingData.roomName || roomData?.name || 'Room Name Not Available'
-          });
+            roomImage: bookingData.roomImage
+          };
+
+          if (!finalBookingData.roomImage) {
+            const roomDoc = await getDoc(doc(db, 'rooms', bookingData.roomId));
+            if (roomDoc.exists()) {
+              const roomData = roomDoc.data();
+              finalBookingData.roomImage = roomData.images?.[0] || roomData.imageUrl || null;
+            }
+          }
+
+          // Check if user has already rated
+          const ratingsQuery = query(
+            collection(db, 'ratings'),
+            where('bookingId', '==', bookingId)
+          );
+          const ratingsSnapshot = await getDocs(ratingsQuery);
+          if (!ratingsSnapshot.empty) {
+            const ratingDoc = ratingsSnapshot.docs[0];
+            setHasRated(true);
+            setExistingRating(ratingDoc.data());
+          }
+          
+          setBooking(finalBookingData);
         }
       } catch (error) {
         console.error('Error fetching booking:', error);
@@ -46,8 +68,37 @@ const BookingDetail = () => {
       }
     };
 
-    fetchBookingAndRoom();
+    fetchBookingAndRating();
   }, [bookingId]);
+
+  const handleRatingSubmit = async ({ rating, feedback }) => {
+    try {
+      await addDoc(collection(db, 'ratings'), {
+        bookingId,
+        roomId: booking.roomId,
+        rating,
+        feedback,
+        createdAt: new Date().toISOString(),
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Thank You!',
+        text: 'Your rating has been submitted successfully.',
+      });
+
+      setHasRated(true);
+      setShowRatingForm(false);
+      setExistingRating({ rating, feedback });
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to submit rating. Please try again.',
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -59,6 +110,8 @@ const BookingDetail = () => {
   }
   
   if (!booking) return <div className="error">Booking not found</div>;
+
+  const canRate = booking?.status.toLowerCase() === 'completed' && !hasRated;
 
   return (
     <div className="booking-detail-page">
@@ -132,6 +185,46 @@ const BookingDetail = () => {
             </section>
           )}
         </div>
+
+        {booking?.status.toLowerCase() === 'completed' && (
+          <div className="rating-section">
+            {hasRated ? (
+              <div className="existing-rating">
+                <h3>Your Rating</h3>
+                <RatingForm
+                  initialRating={existingRating?.rating || 0}
+                  readonly={true}
+                  showFeedback={false}
+                />
+                {existingRating?.feedback && (
+                  <p className="feedback-text">{existingRating.feedback}</p>
+                )}
+              </div>
+            ) : (
+              <>
+                {showRatingForm ? (
+                  <div className="rating-form-wrapper">
+                    <h3>Rate Your Stay</h3>
+                    <RatingForm onSubmit={handleRatingSubmit} />
+                    <button 
+                      className="cancel-rating-button"
+                      onClick={() => setShowRatingForm(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button 
+                    className="rate-stay-button"
+                    onClick={() => setShowRatingForm(true)}
+                  >
+                    Rate Your Stay
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

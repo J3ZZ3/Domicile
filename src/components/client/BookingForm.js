@@ -138,7 +138,7 @@ const BookingForm = () => {
         userId: user.uid,
         roomId: roomData.id,
         roomName: roomData.name || 'Room',
-        roomImage: roomData.images?.[0] || '',
+        roomImage: roomData.images?.[0] || roomData.imageUrl || '',
         capacity: roomData.capacity || 2,
         bedType: roomData.bedType || 'Standard',
         view: roomData.view || 'Standard',

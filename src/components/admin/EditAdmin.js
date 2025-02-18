@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
@@ -10,67 +10,41 @@ const EditAdmin = () => {
   const { adminId } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
-    phoneNumber: ""
+    phoneNumber: "",
+    role: "",
+    status: ""
   });
 
   useEffect(() => {
-    fetchAdminData();
-  }, [fetchAdminData]);
-
-  const fetchAdminData = useCallback(async () => {
-    try {
-      const adminDoc = await getDoc(doc(db, "admins", adminId));
-      if (adminDoc.exists()) {
-        const adminData = adminDoc.data();
-        setFormData({
-          firstName: adminData.firstName || "",
-          lastName: adminData.lastName || "",
-          email: adminData.email || "",
-          phoneNumber: adminData.phoneNumber || ""
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Admin not found",
-          confirmButtonColor: '#c0392b',
-          background: '#1a1a1a',
-          color: '#ffffff',
-          customClass: {
-            popup: 'dark-theme-popup',
-            confirmButton: 'dark-theme-button',
-            cancelButton: 'dark-theme-button',
-            title: 'dark-theme-title',
-            htmlContainer: 'dark-theme-content'
-          }
-        });
-        navigate("/manage-admins");
-      }
-    } catch (error) {
-      console.error("Error fetching admin:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to fetch admin data",
-        confirmButtonColor: '#c0392b',
-        background: '#1a1a1a',
-        color: '#ffffff',
-        customClass: {
-          popup: 'dark-theme-popup',
-          confirmButton: 'dark-theme-button',
-          cancelButton: 'dark-theme-button',
-          title: 'dark-theme-title',
-          htmlContainer: 'dark-theme-content'
+    const fetchAdminData = async () => {
+      try {
+        const adminDoc = await getDoc(doc(db, "users", adminId));
+        if (adminDoc.exists()) {
+          const adminData = adminDoc.data();
+          setFormData({
+            fullName: adminData.fullName || "",
+            email: adminData.email || "",
+            phoneNumber: adminData.phoneNumber || "",
+            role: adminData.role || "",
+            status: adminData.status || ""
+          });
+        } else {
+          setError("Admin not found");
         }
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [adminId, navigate]);
+      } catch (err) {
+        console.error("Error fetching admin:", err);
+        setError("Failed to fetch admin data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdminData();
+  }, [adminId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,134 +56,128 @@ const EditAdmin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
     try {
-      const adminRef = doc(db, "admins", adminId);
-      await updateDoc(adminRef, {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phoneNumber: formData.phoneNumber
+      await updateDoc(doc(db, "users", adminId), {
+        ...formData,
+        updatedAt: new Date().toISOString()
       });
 
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Admin updated successfully",
-        confirmButtonColor: '#c0392b',
-        background: '#1a1a1a',
-        color: '#ffffff',
-        customClass: {
-          popup: 'dark-theme-popup',
-          confirmButton: 'dark-theme-button',
-          cancelButton: 'dark-theme-button',
-          title: 'dark-theme-title',
-          htmlContainer: 'dark-theme-content'
-        }
+        text: "Admin details updated successfully",
       });
 
-      navigate("/manage-admins");
-    } catch (error) {
-      console.error("Error updating admin:", error);
+      navigate("/admin/manage-admins");
+    } catch (err) {
+      console.error("Error updating admin:", err);
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Failed to update admin",
-        confirmButtonColor: '#c0392b',
-        background: '#1a1a1a',
-        color: '#ffffff',
-        customClass: {
-          popup: 'dark-theme-popup',
-          confirmButton: 'dark-theme-button',
-          cancelButton: 'dark-theme-button',
-          title: 'dark-theme-title',
-          htmlContainer: 'dark-theme-content'
-        }
+        text: "Failed to update admin details",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
   if (loading) {
     return (
-      <div className="edit-admin-page">
-        <AdminNavbar />
-        <div className="loading">Loading...</div>
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading admin data...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <p>{error}</p>
+        <button onClick={() => navigate("/admin/manage-admins")} className="back-button">
+          Back to Admin List
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="edit-admin-page">
-      <AdminNavbar />
-      <div className="edit-admin-container">
-        <h1>Edit Administrator</h1>
-        <form onSubmit={handleSubmit} className="edit-admin-form">
-          <div className="form-group">
-            <label>First Name *</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              placeholder="Enter first name"
-              required
-            />
-          </div>
+    <div className="edit-admin-container">
+      <h2>Edit Admin</h2>
+      <form onSubmit={handleSubmit} className="edit-admin-form">
+        <div className="form-group">
+          <label htmlFor="fullName">Full Name</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div className="form-group">
-            <label>Last Name *</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              placeholder="Enter last name"
-              required
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div className="form-group">
-            <label>Email Address</label>
-            <input
-              type="email"
-              value={formData.email}
-              disabled
-              className="disabled-input"
-            />
-            <small className="helper-text">Email cannot be changed</small>
-          </div>
+        <div className="form-group">
+          <label htmlFor="phoneNumber">Phone Number</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div className="form-group">
-            <label>Phone Number</label>
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              placeholder="Enter phone number"
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="role">Role</label>
+          <select
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="superadmin">Super Admin</option>
+          </select>
+        </div>
 
-          <div className="button-group">
-            <button 
-              type="button" 
-              className="cancel-button"
-              onClick={() => navigate("/manage-admins")}
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              className="save-button" 
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        </form>
-      </div>
+        <div className="form-group">
+          <label htmlFor="status">Status</label>
+          <select
+            id="status"
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+
+        <div className="form-actions">
+          <button type="button" onClick={() => navigate("/admin/manage-admins")} className="cancel-button">
+            Cancel
+          </button>
+          <button type="submit" className="save-button">
+            Save Changes
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
