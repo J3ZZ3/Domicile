@@ -162,12 +162,14 @@ button:active {
     padding: 0 2rem;
     position: relative;
     z-index: 1;
+    overflow-x: hidden;
 }
 
 .booking-grid {
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    max-width: 100%;
 }
 
 .room-summary {
@@ -288,7 +290,7 @@ button:active {
 
 .form-group {
     margin-bottom: 2rem;
-    
+    position: relative;
 }
 
 .form-group label {
@@ -307,9 +309,9 @@ button:active {
 
 .input-with-icon svg {
     position: absolute;
-    left: 1.5rem;
-    color: #8B0000;
-    font-size: 1.8rem;
+    left: 0.5rem !important;
+    color: #8B0000 !important;
+    font-size: 1.2rem !important;
     pointer-events: none;
 }
 
@@ -335,17 +337,18 @@ button:active {
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
+    padding-left: 10px;
 }
 
 .form-group input[type="date"] {
-    width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
+    width: calc(100% - 85px);
+    margin-left: 0;
+    padding-left: 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     font-size: 1.1rem;
     transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.8);
-    margin-left: 85px;
     color: #000000;
     cursor: pointer;
 }
@@ -371,7 +374,7 @@ button:active {
 }
 
 textarea {
-    width: 270%;
+    width: 100%;
     padding: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
@@ -582,7 +585,7 @@ html, body {
 }
 
 .form-group.personal-info {
-    width: 270%;
+    width: 100%;
     margin-bottom: 2rem;
 }
 
@@ -596,13 +599,21 @@ html, body {
 
 @media (max-width: 1200px) {
     .form-group.personal-info {
-        width: 200%;
+        width: 100%;
+    }
+    
+    .booking-grid {
+        grid-template-columns: 1fr 1fr;
     }
 }
 
 @media (max-width: 992px) {
     .form-group.personal-info {
-        width: 150%;
+        width: 100%;
+    }
+    
+    .booking-grid {
+        grid-template-columns: 1fr;
     }
 }
 

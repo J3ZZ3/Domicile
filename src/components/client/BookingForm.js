@@ -12,7 +12,7 @@ import PayPalPaymentButton from './common/PayPalPaymentButton';
 
 const FormInput = ({ icon: Icon, ...props }) => (
   <div className="input-with-icon">
-    <Icon />
+    {Icon && <Icon />}
     <input {...props} />
   </div>
 );
@@ -279,12 +279,26 @@ const BookingForm = () => {
                 <div className="dates-group">
                   <div className="form-group">
                     <label>Check-in Date</label>
-                    <FormInput icon={IoCalendar} type="date" name="checkInDate" value={formData.checkInDate} onChange={handleChange} min={new Date().toISOString().split('T')[0]} required />
+                    <FormInput 
+                      type="date" 
+                      name="checkInDate" 
+                      value={formData.checkInDate} 
+                      onChange={handleChange} 
+                      min={new Date().toISOString().split('T')[0]} 
+                      required 
+                    />
                   </div>
 
                   <div className="form-group">
                     <label>Check-out Date</label>
-                    <FormInput icon={IoCalendar} type="date" name="checkOutDate" value={formData.checkOutDate} onChange={handleChange} min={formData.checkInDate || new Date().toISOString().split('T')[0]} required />
+                    <FormInput 
+                      type="date" 
+                      name="checkOutDate" 
+                      value={formData.checkOutDate} 
+                      onChange={handleChange} 
+                      min={formData.checkInDate || new Date().toISOString().split('T')[0]} 
+                      required 
+                    />
                   </div>
                 </div>
 

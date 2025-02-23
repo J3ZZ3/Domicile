@@ -107,44 +107,54 @@
 }
 
 .booking-card {
-    background: rgba(255, 255, 255, 0.685);
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     align-items: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 2rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .price-section {
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    margin-top: 0;
 }
 
 .price {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: #ff0000;
-    margin-top: 100px;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-top: 0;
+    line-height: 1;
 }
 
 .per-night {
-    color: #000000;
-    font-size: 1.1rem;
+    color: #666;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.status-section {
+    text-align: center;
 }
 
 .status-badge {
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
     font-size: 0.9rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 50px;
-    margin-left: 50px;
+    letter-spacing: 1.5px;
+    margin: 0;
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .status-badge.available {
@@ -158,19 +168,19 @@
 }
 
 .book-now-btn {
-    background: #8B0000;
+    background: linear-gradient(135deg, #8B0000, #a00000);
     color: white;
     border: none;
-    border-radius: 30px;
-    padding: 1rem 2rem;
+    border-radius: 8px;
+    padding: 1.2rem 2.5rem;
     font-size: 1.1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 200px;
-    position: relative;
-    overflow: hidden;
-    margin-top: 70px;
+    margin: 0;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .book-now-btn:not(.disabled)::after {
@@ -313,13 +323,17 @@ section h2 {
     }
 
     .booking-card {
-        flex-direction: column;
-        align-items: stretch;
-        text-align: center;
+        grid-template-columns: 1fr;
+        padding: 2rem;
+        gap: 1.5rem;
     }
 
     .price-section {
-        justify-content: center;
+        align-items: center;
+    }
+
+    .price {
+        font-size: 2.5rem;
     }
 
     .status-section {
