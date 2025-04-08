@@ -6,6 +6,8 @@ import { IoCalendar, IoPersonCircle, IoHome, IoCall, IoArrowBack, IoPeople, IoBe
 import './ClientStyles/BookingDetail.css';
 import RatingForm from './common/RatingForm';
 import Swal from 'sweetalert2';
+import Footer from '../common/Footer';
+import Navbar from './common/ClientNavbar';
 
 const InfoItem = ({ icon: Icon, label, value }) => (
   <div className="info-item">
@@ -114,118 +116,124 @@ const BookingDetail = () => {
   const canRate = booking?.status.toLowerCase() === 'completed' && !hasRated;
 
   return (
-    <div className="booking-detail-page">
-      <button className="back-button" onClick={() => navigate(-1)}>
-        <IoArrowBack /> Back to Bookings
-      </button>
+    <div className="booking-detail-container">
+      <Navbar />
+      <div className="booking-detail-content">
+        <div className="booking-detail-page">
+          <button className="back-button" onClick={() => navigate(-1)}>
+            <IoArrowBack /> Back to Bookings
+          </button>
 
-      <div className="booking-detail-container">
-        <div className="room-preview">
-          {booking.roomImage ? (
-            <img src={booking.roomImage} alt={booking.roomName} />
-          ) : (
-            <div className="no-image-placeholder">No image available</div>
-          )}
-          <div className="status-overlay" data-status={booking.status.toLowerCase()}>
-            {booking.status}
-          </div>
-        </div>
-
-        <div className="booking-info-sections">
-          <section className="booking-section">
-            <h2>Room Information</h2>
-            <div className="info-grid">
-              <h3>{booking.roomName}</h3>
-              <InfoItem icon={IoPeople} label="Capacity" value={`${booking.capacity} persons`} />
-              <InfoItem icon={IoBed} label="Bed Type" value={booking.bedType} />
-              <InfoItem icon={IoEye} label="View" value={booking.view} />
-            </div>
-          </section>
-
-          <section className="booking-section">
-            <h2>Booking Details</h2>
-            <div className="info-grid">
-              <InfoItem 
-                icon={IoCalendar} 
-                label="Check-in" 
-                value={new Date(booking.checkInDate).toLocaleDateString()} 
-              />
-              <InfoItem 
-                icon={IoCalendar} 
-                label="Check-out" 
-                value={new Date(booking.checkOutDate).toLocaleDateString()} 
-              />
-              <InfoItem 
-                icon={IoWallet} 
-                label="Total Amount" 
-                value={`$${booking.totalAmount}`} 
-              />
-              <InfoItem 
-                icon={IoWallet} 
-                label="Payment Status" 
-                value={booking.paymentStatus} 
-              />
-            </div>
-          </section>
-
-          <section className="booking-section">
-            <h2>Guest Information</h2>
-            <div className="info-grid">
-              <InfoItem icon={IoPersonCircle} label="Full Name" value={booking.fullName} />
-              <InfoItem icon={IoHome} label="Email" value={booking.email} />
-              <InfoItem icon={IoHome} label="Address" value={booking.address} />
-              <InfoItem icon={IoCall} label="Contact" value={booking.contactNumber} />
-            </div>
-          </section>
-
-          {booking.specialRequests && (
-            <section className="booking-section">
-              <h2>Special Requests</h2>
-              <p className="special-requests">{booking.specialRequests}</p>
-            </section>
-          )}
-        </div>
-
-        {booking?.status.toLowerCase() === 'completed' && (
-          <div className="rating-section">
-            {hasRated ? (
-              <div className="existing-rating">
-                <h3>Your Rating</h3>
-                <RatingForm
-                  initialRating={existingRating?.rating || 0}
-                  readonly={true}
-                  showFeedback={false}
-                />
-                {existingRating?.feedback && (
-                  <p className="feedback-text">{existingRating.feedback}</p>
-                )}
+          <div className="booking-detail-container">
+            <div className="room-preview">
+              {booking.roomImage ? (
+                <img src={booking.roomImage} alt={booking.roomName} />
+              ) : (
+                <div className="no-image-placeholder">No image available</div>
+              )}
+              <div className="status-overlay" data-status={booking.status.toLowerCase()}>
+                {booking.status}
               </div>
-            ) : (
-              <>
-                {showRatingForm ? (
-                  <div className="rating-form-wrapper">
-                    <h3>Rate Your Stay</h3>
-                    <RatingForm onSubmit={handleRatingSubmit} />
-                    <button 
-                      className="cancel-rating-button"
-                      onClick={() => setShowRatingForm(false)}
-                    >
-                      Cancel
-                    </button>
+            </div>
+
+            <div className="booking-info-sections">
+              <section className="booking-section">
+                <h2>Room Information</h2>
+                <div className="info-grid">
+                  <h3>{booking.roomName}</h3>
+                  <InfoItem icon={IoPeople} label="Capacity" value={`${booking.capacity} persons`} />
+                  <InfoItem icon={IoBed} label="Bed Type" value={booking.bedType} />
+                  <InfoItem icon={IoEye} label="View" value={booking.view} />
+                </div>
+              </section>
+
+              <section className="booking-section">
+                <h2>Booking Details</h2>
+                <div className="info-grid">
+                  <InfoItem 
+                    icon={IoCalendar} 
+                    label="Check-in" 
+                    value={new Date(booking.checkInDate).toLocaleDateString()} 
+                  />
+                  <InfoItem 
+                    icon={IoCalendar} 
+                    label="Check-out" 
+                    value={new Date(booking.checkOutDate).toLocaleDateString()} 
+                  />
+                  <InfoItem 
+                    icon={IoWallet} 
+                    label="Total Amount" 
+                    value={`$${booking.totalAmount}`} 
+                  />
+                  <InfoItem 
+                    icon={IoWallet} 
+                    label="Payment Status" 
+                    value={booking.paymentStatus} 
+                  />
+                </div>
+              </section>
+
+              <section className="booking-section">
+                <h2>Guest Information</h2>
+                <div className="info-grid">
+                  <InfoItem icon={IoPersonCircle} label="Full Name" value={booking.fullName} />
+                  <InfoItem icon={IoHome} label="Email" value={booking.email} />
+                  <InfoItem icon={IoHome} label="Address" value={booking.address} />
+                  <InfoItem icon={IoCall} label="Contact" value={booking.contactNumber} />
+                </div>
+              </section>
+
+              {booking.specialRequests && (
+                <section className="booking-section">
+                  <h2>Special Requests</h2>
+                  <p className="special-requests">{booking.specialRequests}</p>
+                </section>
+              )}
+            </div>
+
+            {booking?.status.toLowerCase() === 'completed' && (
+              <div className="rating-section">
+                {hasRated ? (
+                  <div className="existing-rating">
+                    <h3>Your Rating</h3>
+                    <RatingForm
+                      initialRating={existingRating?.rating || 0}
+                      readonly={true}
+                      showFeedback={false}
+                    />
+                    {existingRating?.feedback && (
+                      <p className="feedback-text">{existingRating.feedback}</p>
+                    )}
                   </div>
                 ) : (
-                  <button 
-                    className="rate-stay-button"
-                    onClick={() => setShowRatingForm(true)}
-                  >
-                    Rate Your Stay
-                  </button>
+                  <>
+                    {showRatingForm ? (
+                      <div className="rating-form-wrapper">
+                        <h3>Rate Your Stay</h3>
+                        <RatingForm onSubmit={handleRatingSubmit} />
+                        <button 
+                          className="cancel-rating-button"
+                          onClick={() => setShowRatingForm(false)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button 
+                        className="rate-stay-button"
+                        onClick={() => setShowRatingForm(true)}
+                      >
+                        Rate Your Stay
+                      </button>
+                    )}
+                  </>
                 )}
-              </>
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

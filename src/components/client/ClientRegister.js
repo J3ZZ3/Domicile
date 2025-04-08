@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
@@ -13,14 +13,15 @@ const ClientRegister = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { currentUser } = useAuth();
   const MySwal = withReactContent(Swal);
 
   useEffect(() => {
-    if (currentUser) {
-      navigate("/client-dashboard");
+    if (currentUser && location.pathname === '/client-register') {
+      navigate("/client-dashboard", { replace: true });
     }
-  }, [currentUser, navigate]);
+  }, [currentUser, navigate, location]);
 
   const handleRegister = async (e) => {
     e.preventDefault();

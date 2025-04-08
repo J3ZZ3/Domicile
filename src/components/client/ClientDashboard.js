@@ -12,6 +12,7 @@ import hotelFront from '../assets/hotel-front.jpg';
 import lobby from '../assets/lobby.jpg';
 import pool from '../assets/pool.jpg';
 import RoomFilters from './common/RoomFilters';
+import Footer from '../common/Footer';
 
 const ClientDashboard = () => {
   const [rooms, setRooms] = useState([]);
@@ -229,6 +230,7 @@ const ClientDashboard = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

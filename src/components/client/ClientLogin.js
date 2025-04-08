@@ -18,10 +18,11 @@ const ClientLogin = () => {
   const MySwal = withReactContent(Swal);
 
   useEffect(() => {
-    if (currentUser) {
-      navigate("/client-dashboard");
+    if (currentUser && location.pathname === '/client-login') {
+      const from = location.state?.from?.pathname || "/client-dashboard";
+      navigate(from, { replace: true });
     }
-  }, [currentUser, navigate]);
+  }, [currentUser, navigate, location]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

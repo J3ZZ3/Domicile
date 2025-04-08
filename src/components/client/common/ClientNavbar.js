@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
+import { useAuth } from "../../../context/AuthContext";
 import { 
     IoPersonCircleOutline, 
     IoLogOutOutline,
@@ -13,11 +13,11 @@ import "../ClientStyles/ClientNavbar.css";
 const Navbar = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const navigate = useNavigate();
-    const auth = getAuth();
+    const { logout } = useAuth();
 
     const handleLogout = async () => {
         try {
-            await signOut(auth);
+            await logout();
             Swal.fire({
                 icon: 'success',
                 title: 'Logged Out Successfully',

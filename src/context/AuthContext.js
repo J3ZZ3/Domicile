@@ -4,7 +4,9 @@ import {
   onAuthStateChanged, 
   signInWithEmailAndPassword,
   signOut,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
@@ -19,6 +21,14 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
+
+  // Set persistence to local storage
+  useEffect(() => {
+    setPersistence(auth, browserLocalPersistence)
+      .catch((error) => {
+        console.error("Auth persistence error:", error);
+      });
+  }, [auth]);
 
   async function signup(email, password, userData) {
     try {
@@ -47,8 +57,23 @@ export function AuthProvider({ children }) {
     }
   }
 
-  function logout() {
-    return signOut(auth);
+  async function logout() {
+    try {
+      // Clear all local storage
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Sign out from Firebase
+      await signOut(auth);
+      
+      // Reset the current user state
+      setCurrentUser(null);
+      
+      return true;
+    } catch (error) {
+      console.error('Error during logout:', error);
+      throw error;
+    }
   }
 
   useEffect(() => {

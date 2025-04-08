@@ -11,6 +11,7 @@ import { MdRestaurant, MdLocalLaundryService, MdMeetingRoom,
 import { GiCardExchange, GiLockers } from 'react-icons/gi';
 import { BiSolidFirstAid } from 'react-icons/bi';
 import './ClientStyles/Amenities.css';
+import Footer from '../common/Footer';
 
 const Amenities = () => {
   const location = useLocation();
@@ -141,7 +142,7 @@ const Amenities = () => {
   ];
 
   return (
-    <div className="amenities-page">
+    <div className="amenities-container">
       {!isFromHome && <Navbar />}
       <div className="amenities-content">
         <div className="amenities-header">
@@ -158,6 +159,7 @@ const Amenities = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

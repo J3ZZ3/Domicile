@@ -9,6 +9,8 @@ import './ClientStyles/BookingForm.css';
 import 'jspdf-autotable';
 import ReceiptGenerator from './common/ReceiptGenerator';
 import PayPalPaymentButton from './common/PayPalPaymentButton';
+import Footer from '../common/Footer';
+import Navbar from './common/ClientNavbar';
 
 const FormInput = ({ icon: Icon, ...props }) => (
   <div className="input-with-icon">
@@ -189,6 +191,15 @@ const BookingForm = () => {
     return Math.ceil(Math.abs(new Date(formData.checkOutDate) - new Date(formData.checkInDate)) / (1000 * 60 * 60 * 24));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm(true)) {
+      return;
+    }
+    // The actual form submission is handled by the PayPal button
+    // This function just prevents the default form submission
+  };
+
   if (!roomData) return <div className="booking-error">No room data available.</div>;
 
   if (isLoading) {
@@ -203,163 +214,159 @@ const BookingForm = () => {
   const totalPrice = calculateNights() * (roomData?.price || 0);
 
   return (
-    <div className="booking-layout">
-      {isProcessing && (
-        <div className="processing-overlay">
-          <div className="processing-content">
-            <IoReload className="loading-icon" />
-            <p>Processing your booking...</p>
-          </div>
-        </div>
-      )}
-      
-      <div className="booking-page">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          <IoArrowBack /> Back to Room Details
-        </button>
-        
-        <div className="booking-container">
-          <div className="booking-grid">
-            <div className="room-summary">
-              <img src={roomData.imageUrl} alt={roomData.name} className="room-image" />
-              <div className="summary-content">
-                <h2>Booking Summary</h2>
-                <h3>{roomData.name}</h3>
-                <p className="room-type">{roomData.type} Room</p>
-                <SummaryItem label="Price per night" value={`$${roomData.price}`} />
-                <SummaryItem label="Number of nights" value={calculateNights()} />
-                <SummaryItem label="Total Price" value={`$${totalPrice}`} />
-
-                <div className="room-additional-info">
-                  <h4>Room Details</h4>
-                  <div className="info-grid">
-                    <RoomInfo icon={IoPeople} label="Capacity" value={`${roomData.capacity} persons`} style={{ color: 'white', borderColor: 'white' }} />
-                    <RoomInfo icon={IoBed} label="Bed" value={roomData.bedType} style={{ color: 'white', borderColor: 'white' }} />
-                    <RoomInfo icon={IoEye} label="View" value={roomData.view} style={{ color: 'white', borderColor: 'white' }} />
-                    <RoomInfo icon={IoHome} label="Floor"  value={roomData.floor} style={{ color: 'white', borderColor: 'white' }} />
-                  </div>
-
-                  {roomData.policies && (
-                    <div className="room-policies">
-                      <h4>Room Policies</h4>
-                      <ul>
-                        {roomData.policies.map((policy, index) => (
-                          <li key={index}>{policy}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+    <div className="booking-form-container">
+      <Navbar />
+      <div className="booking-form-content">
+        <div className="booking-layout">
+          {isProcessing && (
+            <div className="processing-overlay">
+              <div className="processing-content">
+                <IoReload className="loading-icon" />
+                <p>Processing your booking...</p>
               </div>
             </div>
-
-            <div className="booking-form-container">
-              <h2>Guest Information</h2>
-              <form>
-                <div className="form-group">
-                  <label>Full Name</label>
-                  <FormInput icon={IoPersonCircle} type="text" name="fullName" value={formData.fullName} onChange={handleChange} placeholder="Enter your full name" required />
-                </div>
-
-                <div className="form-group">
-                  <label>Email</label>
-                  <FormInput icon={IoMail} type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter your email" required />
-                </div>
-
-                <div className="form-group">
-                  <label>Address</label>
-                  <FormInput icon={IoHome} type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Enter your address" required />
-                </div>
-
-                <div className="form-group">
-                  <label>Contact Number</label>
-                  <FormInput icon={IoCall} type="tel" name="contactNumber" value={formData.contactNumber} onChange={handleChange} placeholder="Enter your contact number" required />
-                </div>
-
-                <div className="dates-group">
-                  <div className="form-group">
-                    <label>Check-in Date</label>
-                    <FormInput 
-                      type="date" 
-                      name="checkInDate" 
-                      value={formData.checkInDate} 
-                      onChange={handleChange} 
-                      min={new Date().toISOString().split('T')[0]} 
-                      required 
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Check-out Date</label>
-                    <FormInput 
-                      type="date" 
-                      name="checkOutDate" 
-                      value={formData.checkOutDate} 
-                      onChange={handleChange} 
-                      min={formData.checkInDate || new Date().toISOString().split('T')[0]} 
-                      required 
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Special Requests</label>
-                  <textarea name="specialRequests" value={formData.specialRequests} onChange={handleChange} placeholder="Any special requests or preferences?" rows="4" />
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="payment-sidebar">
-        <div className="payment-summary">
-          <h3>Booking Summary</h3>
-          <SummaryItem label="Room Rate" value={`$${roomData.price} / night`} />
-          <SummaryItem label="Number of Nights" value={calculateNights()} />
-          <SummaryItem label="Total Amount" value={`$${totalPrice}`} />
+          )}
           
-          <div className="payment-section">
-            <div className="paypal-button-container">
-              <PayPalPaymentButton 
-                amount={totalPrice}
-                description={`Booking for ${roomData.name}`}
-                onSuccess={handlePaymentSuccess}
-                validate={() => validateForm(true)}
-                disabled={!isFormValid}
-              />
-            </div>
+          <div className="booking-page">
+            <button className="back-button" onClick={() => navigate(-1)}>
+              <IoArrowBack /> Back to Room Details
+            </button>
             
-            {currentBookings.length > 0 && (
-              <div className="current-bookings-section">
-                <h3>Current Bookings for this Room:</h3>
-                <div className="bookings-list">
-                  {currentBookings.map(booking => (
-                    <div key={booking.id} className="booking-date-item">
-                      <IoCalendar className="calendar-icon" />
-                      <span>
-                        {new Date(booking.checkInDate).toLocaleDateString()} - {new Date(booking.checkOutDate).toLocaleDateString()}
-                      </span>
-                      <span className="booking-status">{booking.status}</span>
+            <div className="booking-container">
+              <div className="booking-grid">
+                <div className="room-summary">
+                  <img src={roomData.imageUrl} alt={roomData.name} className="room-image" />
+                  <div className="summary-content">
+                    <h2>Booking Summary</h2>
+                    <h3>{roomData.name}</h3>
+                    <p className="room-type">{roomData.type} Room</p>
+                    <SummaryItem label="Price per night" value={`$${roomData.price}`} />
+                    <SummaryItem label="Number of nights" value={calculateNights()} />
+                    <SummaryItem label="Total Price" value={`$${totalPrice}`} />
+
+                    <div className="room-additional-info">
+                      <h4>Room Details</h4>
+                      <div className="info-grid">
+                        <RoomInfo icon={IoPeople} label="Capacity" value={`${roomData.capacity} persons`} style={{ color: 'white', borderColor: 'white' }} />
+                        <RoomInfo icon={IoBed} label="Bed" value={roomData.bedType} style={{ color: 'white', borderColor: 'white' }} />
+                        <RoomInfo icon={IoEye} label="View" value={roomData.view} style={{ color: 'white', borderColor: 'white' }} />
+                        <RoomInfo icon={IoHome} label="Floor" value={roomData.floor} style={{ color: 'white', borderColor: 'white' }} />
+                      </div>
+
+                      {roomData.policies && (
+                        <div className="room-policies">
+                          <h4>Room Policies</h4>
+                          <ul>
+                            {roomData.policies.map((policy, index) => (
+                              <li key={index}>{policy}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                  ))}
+                  </div>
+                </div>
+
+                <div className="booking-form-wrapper">
+                  <h2>Guest Information</h2>
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <label>Full Name</label>
+                      <FormInput 
+                        icon={IoPersonCircle}
+                        type="text"
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Email</label>
+                      <FormInput 
+                        icon={IoMail}
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Address</label>
+                      <FormInput 
+                        icon={IoHome}
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Contact Number</label>
+                      <FormInput 
+                        icon={IoCall}
+                        type="tel"
+                        name="contactNumber"
+                        value={formData.contactNumber}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Check-in Date</label>
+                      <FormInput 
+                        icon={IoCalendar}
+                        type="date"
+                        name="checkInDate"
+                        value={formData.checkInDate}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Check-out Date</label>
+                      <FormInput 
+                        icon={IoCalendar}
+                        type="date"
+                        name="checkOutDate"
+                        value={formData.checkOutDate}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Special Requests</label>
+                      <textarea
+                        name="specialRequests"
+                        value={formData.specialRequests}
+                        onChange={handleChange}
+                        rows="4"
+                      />
+                    </div>
+
+                    <div className="payment-section">
+                      <PayPalPaymentButton
+                        amount={totalPrice}
+                        onSuccess={handlePaymentSuccess}
+                        disabled={!isFormValid}
+                      />
+                    </div>
+                  </form>
                 </div>
               </div>
-            )}
-
-            {paypalError && (
-              <div className="paypal-error-notice">
-                <p>Having trouble with PayPal? Try:</p>
-                <ul>
-                  <li>Temporarily disabling your ad blocker</li>
-                  <li>Using a different browser</li>
-                  <li>Checking your internet connection</li>
-                </ul>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

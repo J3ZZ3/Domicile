@@ -8,6 +8,7 @@ import Navbar from './common/ClientNavbar';
 import { useAuth } from '../../context/AuthContext'; // Import the Auth context
 import BookingCard from './common/BookingCard';
 import './ClientStyles/BookingCard.css';
+import Footer from '../common/Footer';
 
 const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
@@ -308,6 +309,7 @@ const BookingHistory = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

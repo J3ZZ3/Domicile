@@ -10,6 +10,7 @@ import pool from '../assets/pool.jpg';
 import 'leaflet/dist/leaflet.css';
 import './ClientStyles/HotelDetails.css';
 import L from 'leaflet';
+import Footer from '../common/Footer';
 
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -55,9 +56,9 @@ const HotelDetails = () => {
     }, [images.length]);
 
     return (
-        <div className="hotel-details-page">
+        <div className="hotel-details-container">
             {!isFromHome && <Navbar />}
-            <div className="hotel-content">
+            <div className="hotel-details-content">
                 <div className="hotel-info-section">
                     <h1>Welcome to Domicile Hotels</h1>
                     <p className="hotel-description">
@@ -116,6 +117,7 @@ const HotelDetails = () => {
                     </MapContainer>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };
