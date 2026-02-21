@@ -44,11 +44,11 @@
 }
 
 .hero-content h1 {
-    margin-left: 48rem;
     font-size: 3.5rem;
     font-weight: 600;
     color: rgb(255, 255, 255);
-    width: 90%;
+    width: 100%;
+    text-align: left;
 }
 
 .room-type {

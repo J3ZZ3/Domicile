@@ -3,27 +3,27 @@ import { IoStar, IoStarHalf, IoStarOutline } from 'react-icons/io5';
 import '../ClientStyles/RatingDisplay.css';
 
 const RatingDisplay = ({ 
-  rating, 
-  totalRatings, 
+  rating = 0, 
+  totalRatings = 0, 
   showTotal = true,
   size = 'medium' 
 }) => {
+  const safeRating = Number(rating) || 0;
+  const safeTotalRatings = Number(totalRatings) || 0;
+
   const getStars = () => {
     const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
+    const fullStars = Math.floor(safeRating);
+    const hasHalfStar = safeRating % 1 >= 0.5;
 
-    // Add full stars
     for (let i = 0; i < fullStars; i++) {
       stars.push(<IoStar key={`full-${i}`} className="star-filled" />);
     }
 
-    // Add half star if needed
     if (hasHalfStar) {
       stars.push(<IoStarHalf key="half" className="star-filled" />);
     }
 
-    // Add empty stars
     const emptyStars = 5 - stars.length;
     for (let i = 0; i < emptyStars; i++) {
       stars.push(<IoStarOutline key={`empty-${i}`} className="star-outline" />);
@@ -39,11 +39,11 @@ const RatingDisplay = ({
       </div>
       {showTotal && (
         <span className="rating-text">
-          {rating.toFixed(1)} ({totalRatings} {totalRatings === 1 ? 'review' : 'reviews'})
+          {safeRating.toFixed(1)} ({safeTotalRatings} {safeTotalRatings === 1 ? 'review' : 'reviews'})
         </span>
       )}
     </div>
   );
 };
 
-export default RatingDisplay; 
+export default React.memo(RatingDisplay);

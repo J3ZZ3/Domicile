@@ -1,223 +1,155 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { db } from "../../firebase/firebaseConfig";
-import { collection, getDocs, query, where, addDoc, doc, updateDoc, getDoc } from "firebase/firestore"; // Import addDoc, doc, and updateDoc
-import Swal from "sweetalert2";
+import { collection, query, where, orderBy, limit, startAfter, getDocs, doc, getDoc } from "firebase/firestore";
 import "./ClientStyles/BookingHistory.css";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from './common/ClientNavbar';
-import { useAuth } from '../../context/AuthContext'; // Import the Auth context
+import { useAuth } from '../../context/AuthContext';
 import BookingCard from './common/BookingCard';
 import './ClientStyles/BookingCard.css';
 import Footer from '../common/Footer';
 
+const BOOKINGS_PER_PAGE = 15;
+
+const roomImageCache = new Map();
+
 const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
-  const [rating, setRating] = useState({});
-  const { currentUser } = useAuth(); // Get current user from context
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const enrichBookingsWithRooms = useCallback(async (bookingDocs) => {
+    const roomIds = [...new Set(bookingDocs.map(b => b.roomId).filter(Boolean))];
+    const uncachedIds = roomIds.filter(id => !roomImageCache.has(id));
+
+    if (uncachedIds.length > 0) {
+      await Promise.all(
+        uncachedIds.map(async (roomId) => {
+          try {
+            const roomDoc = await getDoc(doc(db, "rooms", roomId));
+            roomImageCache.set(roomId, roomDoc.exists() ? roomDoc.data() : null);
+          } catch {
+            roomImageCache.set(roomId, null);
+          }
+        })
+      );
+    }
+
+    return bookingDocs.map(booking => {
+      const roomData = roomImageCache.get(booking.roomId);
+      return {
+        ...booking,
+        roomImage: roomData?.images?.[0] || roomData?.imageUrl || null,
+        formattedCheckIn: new Date(booking.checkInDate).toLocaleDateString(),
+        formattedCheckOut: new Date(booking.checkOutDate).toLocaleDateString(),
+        roomName: booking.roomName || roomData?.name || 'Room Name Not Available'
+      };
+    });
+  }, []);
+
+  const fetchBookings = useCallback(async (afterDoc = null) => {
     if (!currentUser) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "You need to be logged in to view your booking history.",
-        confirmButtonText: "OK",
-      });
-      Navigate("/client-login");
+      navigate("/client-login");
       return;
     }
 
-    const fetchBookings = async () => {
-      try {
-        const q = query(
-          collection(db, "bookings"),
-          where("userId", "==", currentUser.uid)
-        );
-        const querySnapshot = await getDocs(q);
-
-        const bookingsPromises = querySnapshot.docs.map(async (bookingDoc) => {
-          const bookingData = bookingDoc.data();
-          
-          // Fetch room details to get the image
-          try {
-            const roomDoc = await getDoc(doc(db, "rooms", bookingData.roomId));
-            const roomData = roomDoc.exists() ? roomDoc.data() : null;
-            
-            return {
-              id: bookingDoc.id,
-              ...bookingData,
-              roomImage: roomData?.images?.[0] || roomData?.image || null, // Try both image formats
-              formattedCheckIn: new Date(bookingData.checkInDate).toLocaleDateString(),
-              formattedCheckOut: new Date(bookingData.checkOutDate).toLocaleDateString(),
-              roomName: bookingData.roomName || roomData?.name || 'Room Name Not Available'
-            };
-          } catch (error) {
-            console.error("Error fetching room data:", error);
-            return {
-              id: bookingDoc.id,
-              ...bookingData,
-              roomImage: null,
-              formattedCheckIn: new Date(bookingData.checkInDate).toLocaleDateString(),
-              formattedCheckOut: new Date(bookingData.checkOutDate).toLocaleDateString(),
-              roomName: bookingData.roomName || 'Room Name Not Available'
-            };
-          }
-        });
-
-        const userBookings = await Promise.all(bookingsPromises);
-        userBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        
-        setBookings(userBookings);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching bookings: ", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "There was an issue fetching your booking history.",
-        });
-      }
-    };
-
-    fetchBookings();
-  }, [currentUser]);
-
-  const handleRatingClick = (bookingId, rate) => {
-    setRating((prevRating) => ({
-      ...prevRating,
-      [bookingId]: rate,
-    }));
-  };
-
-  const submitRating = async (bookingId, roomId) => {
-    const userRating = rating[bookingId];
-
-    if (!userRating || userRating < 1 || userRating > 5) {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Rating",
-        text: "Please select a rating between 1 and 5.",
-      });
-      return;
+    if (afterDoc) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
     }
 
     try {
-      // Save the rating
-      await addDoc(collection(db, "ratings"), {
-        userId: currentUser.uid,
-        roomId: roomId,
-        bookingId: bookingId,
-        rating: userRating,
-        timestamp: new Date(),
-      });
+      let q = query(
+        collection(db, "bookings"),
+        where("userId", "==", currentUser.uid),
+        orderBy("createdAt", "desc"),
+        limit(BOOKINGS_PER_PAGE)
+      );
 
-      // Update the room's average rating
-      const ratingsQuery = query(collection(db, "ratings"), where("roomId", "==", roomId));
-      const ratingsSnapshot = await getDocs(ratingsQuery);
-      
-      let totalRating = 0;
-      let numberOfRatings = 0;
-      
-      ratingsSnapshot.forEach((doc) => {
-        totalRating += doc.data().rating;
-        numberOfRatings++;
-      });
+      if (afterDoc) {
+        q = query(
+          collection(db, "bookings"),
+          where("userId", "==", currentUser.uid),
+          orderBy("createdAt", "desc"),
+          startAfter(afterDoc),
+          limit(BOOKINGS_PER_PAGE)
+        );
+      }
 
-      const averageRating = totalRating / numberOfRatings;
+      const snapshot = await getDocs(q);
+      const newDocs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      const enriched = await enrichBookingsWithRooms(newDocs);
 
-      // Update room document with new average rating
-      const roomRef = doc(db, "rooms", roomId);
-      await updateDoc(roomRef, {
-        averageRating: averageRating,
-        numberOfRatings: numberOfRatings
-      });
+      if (afterDoc) {
+        setBookings(prev => [...prev, ...enriched]);
+      } else {
+        setBookings(enriched);
+      }
 
-      Swal.fire({
-        icon: "success",
-        title: "Thank you!",
-        text: "Your rating has been submitted.",
-      });
+      setLastDoc(snapshot.docs[snapshot.docs.length - 1] || null);
+      setHasMore(snapshot.docs.length === BOOKINGS_PER_PAGE);
     } catch (error) {
-      console.error("Error submitting rating: ", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to submit rating. Please try again.",
-      });
+      console.error("Error fetching bookings:", error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
     }
-  };
+  }, [currentUser, navigate, enrichBookingsWithRooms]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchBookings().then(() => { if (cancelled) return; });
+    return () => { cancelled = true; };
+  }, [fetchBookings]);
+
+  const handleLoadMore = useCallback(() => {
+    if (lastDoc && hasMore && !loadingMore) {
+      fetchBookings(lastDoc);
+    }
+  }, [lastDoc, hasMore, loadingMore, fetchBookings]);
 
   const filterBookings = () => {
     if (activeTab === 'all') return bookings;
-    return bookings.filter(booking => booking.status.toLowerCase() === activeTab);
+    return bookings.filter(b => b.status?.toLowerCase() === activeTab);
   };
 
   const getTabCount = (status) => {
     if (status === 'all') return bookings.length;
-    return bookings.filter(booking => booking.status.toLowerCase() === status).length;
+    return bookings.filter(b => b.status?.toLowerCase() === status).length;
   };
 
-  const groupBookingsByDate = (bookings) => {
+  const groupBookingsByDate = (items) => {
     const groups = {};
-    
-    bookings.forEach(booking => {
-      // Make sure we have a valid date
-      const date = booking.createdAt ? 
-        (booking.createdAt instanceof Date ? 
-          booking.createdAt : 
-          new Date(booking.createdAt.seconds ? booking.createdAt.seconds * 1000 : booking.createdAt)
-        ) : new Date();
-
-      // Format the month and year
-      const monthYear = date.toLocaleString('default', { 
-        month: 'long',
-        year: 'numeric'
-      });
-      
-      if (!groups[monthYear]) {
-        groups[monthYear] = [];
-      }
+    items.forEach(booking => {
+      const date = booking.createdAt
+        ? (booking.createdAt instanceof Date
+          ? booking.createdAt
+          : new Date(booking.createdAt.seconds ? booking.createdAt.seconds * 1000 : booking.createdAt))
+        : new Date();
+      const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+      if (!groups[monthYear]) groups[monthYear] = [];
       groups[monthYear].push(booking);
     });
-
-    // Sort the groups by date (most recent first)
-    const sortedGroups = {};
+    const sorted = {};
     Object.keys(groups)
-      .sort((a, b) => {
-        const dateA = new Date(a);
-        const dateB = new Date(b);
-        return dateB - dateA;
-      })
-      .forEach(key => {
-        sortedGroups[key] = groups[key];
-      });
-
-    return sortedGroups;
+      .sort((a, b) => new Date(b) - new Date(a))
+      .forEach(key => { sorted[key] = groups[key]; });
+    return sorted;
   };
 
-  const refreshBookings = async () => {
-    setLoading(true);
-    try {
-      const q = query(
-        collection(db, "bookings"),
-        where("userId", "==", currentUser.uid)
-      );
-      const querySnapshot = await getDocs(q);
-
-      const userBookings = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      userBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      setBookings(userBookings);
-    } catch (error) {
-      console.error("Error refreshing bookings: ", error);
-    }
-    setLoading(false);
-  };
+  const tabs = [
+    { key: 'all', label: 'All' },
+    { key: 'pending approval', label: 'Pending' },
+    { key: 'approved', label: 'Approved' },
+    { key: 'completed', label: 'Completed' },
+    { key: 'cancelled', label: 'Cancelled' },
+  ];
 
   if (loading) {
     return (
@@ -236,52 +168,36 @@ const BookingHistory = () => {
         <Navbar />
         <div className="booking-history-content">
           <div className="no-bookings-message">
-            You have no bookings in your history.
+            <p>You have no bookings in your history.</p>
+            <button onClick={() => navigate('/client-dashboard')} className="browse-rooms-btn">
+              Browse Rooms
+            </button>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
-  const groupedBookings = groupBookingsByDate(filterBookings());
+  const filtered = filterBookings();
+  const groupedBookings = groupBookingsByDate(filtered);
 
   return (
     <div className="booking-history-container">
       <Navbar />
       <div className="booking-history-content">
         <h2>Your Booking History</h2>
-        
+
         <div className="booking-tabs">
-          <button 
-            className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
-            onClick={() => setActiveTab('all')}
-          >
-            All ({getTabCount('all')})
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'pending approval' ? 'active' : ''}`}
-            onClick={() => setActiveTab('pending approval')}
-          >
-            Pending ({getTabCount('pending approval')})
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'approved' ? 'active' : ''}`}
-            onClick={() => setActiveTab('approved')}
-          >
-            Approved ({getTabCount('approved')})
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'completed' ? 'active' : ''}`}
-            onClick={() => setActiveTab('completed')}
-          >
-            Completed ({getTabCount('completed')})
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'cancelled' ? 'active' : ''}`}
-            onClick={() => setActiveTab('cancelled')}
-          >
-            Cancelled ({getTabCount('cancelled')})
-          </button>
+          {tabs.map(tab => (
+            <button
+              key={tab.key}
+              className={`tab-button ${activeTab === tab.key ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.key)}
+            >
+              {tab.label} ({getTabCount(tab.key)})
+            </button>
+          ))}
         </div>
 
         <div className="booking-list">
@@ -289,25 +205,32 @@ const BookingHistory = () => {
             <div key={monthYear} className="booking-month-group">
               <h3 className="month-year-header">{monthYear}</h3>
               <div className="booking-cards-grid">
-                {monthBookings.map((booking) => (
-                  <BookingCard 
-                    key={booking.id} 
+                {monthBookings.map(booking => (
+                  <BookingCard
+                    key={booking.id}
                     booking={{
                       ...booking,
-                      roomName: booking.roomName,
                       checkInDate: booking.formattedCheckIn,
                       checkOutDate: booking.formattedCheckOut,
-                      status: booking.status,
-                      totalAmount: booking.totalAmount,
-                      roomImage: booking.roomImage
                     }}
-                    onBookingUpdate={refreshBookings}
                   />
                 ))}
               </div>
             </div>
           ))}
         </div>
+
+        {hasMore && (
+          <div className="load-more-container">
+            <button
+              className="load-more-btn"
+              onClick={handleLoadMore}
+              disabled={loadingMore}
+            >
+              {loadingMore ? 'Loading...' : 'Load More Bookings'}
+            </button>
+          </div>
+        )}
       </div>
       <Footer />
     </div>

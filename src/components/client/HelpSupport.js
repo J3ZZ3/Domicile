@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Navbar from './common/ClientNavbar';
 import { 
     FaQuestionCircle, 
@@ -9,15 +9,12 @@ import {
     FaCreditCard,
     FaBed,
     FaCalendarAlt,
-    FaUserCog,
-    FaLock,
-    FaCar
+    FaUserCog
 } from 'react-icons/fa';
 import './ClientStyles/HelpSupport.css';
 
 const HelpSupport = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const isFromHome = new URLSearchParams(location.search).get('from') === 'home';
 
     const [activeCategory, setActiveCategory] = useState('booking');

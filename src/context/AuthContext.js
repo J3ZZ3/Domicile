@@ -1,15 +1,12 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { 
-  getAuth, 
   onAuthStateChanged, 
   signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
-  setPersistence,
-  browserLocalPersistence
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../firebase/firebaseConfig';
+import { auth, db } from '../firebase/firebaseConfig';
 
 const AuthContext = createContext();
 
@@ -20,80 +17,71 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const auth = getAuth();
 
-  // Set persistence to local storage
-  useEffect(() => {
-    setPersistence(auth, browserLocalPersistence)
-      .catch((error) => {
-        console.error("Auth persistence error:", error);
-      });
-  }, [auth]);
+  const signup = useCallback(async (email, password, userData) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-  async function signup(email, password, userData) {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+    await setDoc(doc(db, 'users', user.uid), {
+      uid: user.uid,
+      email: user.email,
+      role: 'client',
+      isAdmin: false,
+      ...userData,
+      createdAt: new Date().toISOString()
+    });
 
-      // Create user profile in Firestore
-      await setDoc(doc(db, 'users', user.uid), {
-        email: user.email,
-        ...userData,
-        createdAt: new Date().toISOString()
-      });
+    return user;
+  }, []);
 
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
+  const login = useCallback(async (email, password) => {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  }, []);
 
-  async function login(email, password) {
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      return userCredential.user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function logout() {
-    try {
-      // Clear all local storage
-      localStorage.clear();
-      sessionStorage.clear();
-      
-      // Sign out from Firebase
-      await signOut(auth);
-      
-      // Reset the current user state
-      setCurrentUser(null);
-      
-      return true;
-    } catch (error) {
-      console.error('Error during logout:', error);
-      throw error;
-    }
-  }
+  const logout = useCallback(async () => {
+    await signOut(auth);
+    setCurrentUser(null);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          // Get user profile from Firestore
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          if (userDoc.exists()) {
+          const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+          if (adminDoc.exists()) {
             setCurrentUser({
-              ...user,
-              ...userDoc.data()
+              uid: user.uid,
+              email: user.email,
+              ...adminDoc.data(),
+              isAdmin: true,
+              role: 'admin',
             });
           } else {
-            // If no profile exists, just use the auth user data
-            setCurrentUser(user);
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+              setCurrentUser({
+                uid: user.uid,
+                email: user.email,
+                ...userDoc.data(),
+                isAdmin: false,
+              });
+            } else {
+              setCurrentUser({
+                uid: user.uid,
+                email: user.email,
+                isAdmin: false,
+                role: 'client',
+              });
+            }
           }
         } catch (error) {
           console.error('Error fetching user profile:', error);
-          setCurrentUser(user);
+          setCurrentUser({
+            uid: user.uid,
+            email: user.email,
+            isAdmin: false,
+          });
         }
       } else {
         setCurrentUser(null);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebaseConfig';
@@ -8,13 +8,15 @@ import './AdminStyles/RoomDetail.css';
 const RoomDetail = ({ room, onClose }) => {
   const navigate = useNavigate();
 
-  if (!room) {
-    return null;
-  }
+  useEffect(() => {
+    const handleEsc = (e) => { if (e.key === 'Escape' && onClose) onClose(); };
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
 
-  const handleEdit = () => {
-    navigate(`/update-room/${room.id}`);
-  };
+  if (!room) return null;
+
+  const handleEdit = () => navigate(`/update-room/${room.id}`);
 
   const handleDelete = async () => {
     try {
@@ -26,57 +28,36 @@ const RoomDetail = ({ room, onClose }) => {
         confirmButtonColor: '#c0392b',
         cancelButtonColor: '#666',
         confirmButtonText: 'Yes, delete it!',
-        customClass: {
-          popup: 'custom-popup'
-        }
       });
 
       if (result.isConfirmed) {
         await deleteDoc(doc(db, 'rooms', room.id));
-        
-        await Swal.fire({
-          title: 'Deleted!',
-          text: 'The room has been deleted.',
-          icon: 'success',
-          confirmButtonColor: '#c0392b',
-          customClass: {
-            popup: 'custom-popup'
-          }
-        });
-        
-        onClose();
-        window.location.reload();
+        await Swal.fire({ title: 'Deleted!', text: 'The room has been deleted.', icon: 'success', confirmButtonColor: '#c0392b' });
+        if (onClose) onClose();
+        navigate('/admin-dashboard');
       }
     } catch (error) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Failed to delete the room.',
-        icon: 'error',
-        confirmButtonColor: '#c0392b',
-        customClass: {
-          popup: 'custom-popup'
-        }
-      });
-      console.error("Error deleting room: ", error);
+      console.error("Error deleting room:", error);
+      Swal.fire({ title: 'Error!', text: 'Failed to delete the room.', icon: 'error', confirmButtonColor: '#c0392b' });
     }
   };
 
-  const amenitiesList = room.amenities ? (
-    Array.isArray(room.amenities) ? room.amenities : [room.amenities]
-  ) : [];
+  const amenitiesList = room.amenities
+    ? (Array.isArray(room.amenities) ? room.amenities : [room.amenities])
+    : [];
 
   return (
-    <div className="room-detail-overlay" onClick={onClose}>
+    <div className="room-detail-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Room details">
       <div className="room-detail-content" onClick={e => e.stopPropagation()}>
-        <button className="close-button" onClick={onClose}>&times;</button>
-        
+        <button className="close-button" onClick={onClose} aria-label="Close">&times;</button>
+
         <div className="room-detail-image-container">
-          <img src={room.imageUrl || ''} alt={room.name || 'Room'} className="room-detail-image" />
+          <img src={room.imageUrl || '/placeholder-room.jpg'} alt={room.name || 'Room'} className="room-detail-image" loading="lazy" />
         </div>
 
         <div className="room-detail-info">
           <h2>{room.name || 'Unnamed Room'}</h2>
-          
+
           <div className="detail-section">
             <h3>Room Details</h3>
             <p><strong>Type:</strong> {room.type || 'N/A'}</p>
@@ -88,13 +69,10 @@ const RoomDetail = ({ room, onClose }) => {
           <div className="detail-section">
             <h3>Amenities</h3>
             <div className="amenities-list">
-              {amenitiesList.length > 0 ? (
-                amenitiesList.map((amenity, index) => (
-                  <span key={index} className="amenity-tag">{amenity}</span>
-                ))
-              ) : (
-                <span className="amenity-tag">No amenities listed</span>
-              )}
+              {amenitiesList.length > 0
+                ? amenitiesList.map((amenity, index) => <span key={amenity || index} className="amenity-tag">{amenity}</span>)
+                : <span className="amenity-tag">No amenities listed</span>
+              }
             </div>
           </div>
 
@@ -104,12 +82,8 @@ const RoomDetail = ({ room, onClose }) => {
           </div>
 
           <div className="room-detail-actions">
-            <button className="delete-button" onClick={handleDelete}>
-              Delete Room
-            </button>
-            <button className="edit-button" onClick={handleEdit}>
-              Edit Room
-            </button>
+            <button className="delete-button" onClick={handleDelete}>Delete Room</button>
+            <button className="edit-button" onClick={handleEdit}>Edit Room</button>
           </div>
         </div>
       </div>
@@ -117,4 +91,4 @@ const RoomDetail = ({ room, onClose }) => {
   );
 };
 
-export default RoomDetail; 
+export default RoomDetail;

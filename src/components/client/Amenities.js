@@ -1,12 +1,11 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Navbar from './common/ClientNavbar';
 import { FaSwimmingPool, FaWifi, FaParking, FaCoffee, FaDumbbell, 
          FaConciergeBell, FaSpa, FaGlassMartini, FaShuttleVan, FaBed,
-         FaSnowflake, FaWheelchair, FaBabyCarriage, FaLock, FaUmbrella,
-         FaPhoneAlt } from 'react-icons/fa';
+         FaSnowflake, FaWheelchair, FaBabyCarriage } from 'react-icons/fa';
 import { MdRestaurant, MdLocalLaundryService, MdMeetingRoom, 
-         MdRoomService, MdPets, MdChildCare, MdLocalBar, MdPool,
+         MdRoomService, MdPets, MdChildCare, MdLocalBar,
          MdBusinessCenter } from 'react-icons/md';
 import { GiCardExchange, GiLockers } from 'react-icons/gi';
 import { BiSolidFirstAid } from 'react-icons/bi';
@@ -15,7 +14,6 @@ import Footer from '../common/Footer';
 
 const Amenities = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const isFromHome = new URLSearchParams(location.search).get('from') === 'home';
 
   const amenitiesList = [

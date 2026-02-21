@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase/firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 import Swal from "sweetalert2";
@@ -31,12 +31,12 @@ const ClientRegister = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      await addDoc(collection(db, "users"), {
+      await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         email: user.email,
         role: "client",
         isAdmin: false,
-        createdAt: new Date()
+        createdAt: new Date().toISOString()
       });
 
       MySwal.fire({
@@ -92,7 +92,7 @@ const ClientRegister = () => {
             {loading ? "Creating Account..." : "Register"}
           </button>
         </form>
-        <p>Already have an account? <a href="/client-login">Login</a></p>
+        <p>Already have an account? <a href="/client-login" onClick={(e) => { e.preventDefault(); navigate('/client-login'); }}>Login</a></p>
       </div>
     </div>
   );

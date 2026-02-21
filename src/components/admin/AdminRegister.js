@@ -16,7 +16,7 @@ const AdminRegister = () => {
   const navigate = useNavigate();
   const MySwal = withReactContent(Swal);
 
-  const predefinedSecretCode = "adminSecretCode123";
+  const predefinedSecretCode = process.env.REACT_APP_ADMIN_SECRET_CODE;
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -104,7 +104,7 @@ const AdminRegister = () => {
             {loading ? "Creating Account..." : "Register"}
           </button>
         </form>
-        <p>Already have an account? <a href="/admin-login">Login</a></p>
+        <p>Already have an account? <a href="/admin-login" onClick={(e) => { e.preventDefault(); navigate('/admin-login'); }}>Login</a></p>
       </div>
     </div>
   );

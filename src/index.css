@@ -46,3 +46,48 @@ code {
 .swal2-backdrop-show {
   background: rgba(0, 0, 0, 0.8) !important;
 }
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.load-more-btn {
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.load-more-btn:hover {
+  background: #a93226;
+  transform: translateY(-1px);
+}
+
+.load-more-btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.route-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+  font-size: 1.1rem;
+}

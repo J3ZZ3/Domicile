@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
-import AdminNavbar from "./AdminNavbar";
+import AdminNavbar from "./AdminNavbar"; // eslint-disable-line no-unused-vars
 import Swal from "sweetalert2";
 import "./AdminStyles/EditAdmin.css";
 
@@ -22,7 +22,7 @@ const EditAdmin = () => {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const adminDoc = await getDoc(doc(db, "users", adminId));
+        const adminDoc = await getDoc(doc(db, "admins", adminId));
         if (adminDoc.exists()) {
           const adminData = adminDoc.data();
           setFormData({
@@ -57,7 +57,7 @@ const EditAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateDoc(doc(db, "users", adminId), {
+      await updateDoc(doc(db, "admins", adminId), {
         ...formData,
         updatedAt: new Date().toISOString()
       });
@@ -68,7 +68,7 @@ const EditAdmin = () => {
         text: "Admin details updated successfully",
       });
 
-      navigate("/admin/manage-admins");
+      navigate("/manage-admins");
     } catch (err) {
       console.error("Error updating admin:", err);
       Swal.fire({

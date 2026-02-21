@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Navbar from './common/ClientNavbar';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, 
@@ -22,10 +22,9 @@ L.Icon.Default.mergeOptions({
 
 const HotelDetails = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const isFromHome = new URLSearchParams(location.search).get('from') === 'home';
 
-    const [activeImage, setActiveImage] = useState(0);
+    const [activeImage, setActiveImage] = useState(0); // eslint-disable-line no-unused-vars
 
     const hotelLocation = {
         lat: -25.7479,  // Pretoria, South Africa coordinates

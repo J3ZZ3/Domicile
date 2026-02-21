@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase/firebaseConfig';
-import { collection, addDoc, doc, getDoc, updateDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { IoCalendar, IoPersonCircle, IoHome, IoCall, IoArrowBack, IoPeople, IoBed, IoExpand, IoEye, IoReload, IoMail } from 'react-icons/io5';
+import { IoCalendar, IoPersonCircle, IoHome, IoCall, IoArrowBack, IoPeople, IoBed, IoEye, IoReload, IoMail } from 'react-icons/io5';
 import Swal from 'sweetalert2';
 import './ClientStyles/BookingForm.css';
 import 'jspdf-autotable';
@@ -43,7 +43,6 @@ const BookingForm = () => {
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [currentBookings, setCurrentBookings] = useState([]);
-  const [paypalError, setPaypalError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 

@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase/firebaseConfig';
-import { IoArrowBack } from 'react-icons/io5';
 import Swal from 'sweetalert2';
 import './AdminStyles/UpdateRoom.css';
 import AdminNavbar from "./AdminNavbar";

@@ -3,7 +3,20 @@ import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth"
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
+const requiredEnvVars = [
+  'REACT_APP_API_KEY',
+  'REACT_APP_AUTH_DOMAIN',
+  'REACT_APP_PROJECT_ID',
+  'REACT_APP_STORAGE_BUCKET',
+  'REACT_APP_MESSAGING_SENDER_ID',
+  'REACT_APP_APP_ID',
+];
+
+const missing = requiredEnvVars.filter(key => !process.env[key]);
+if (missing.length > 0) {
+  throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+}
+
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -13,15 +26,12 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Set persistence to local
-setPersistence(auth, browserLocalPersistence)
-  .catch((error) => {
-    console.error("Auth persistence error:", error);
-  });
+setPersistence(auth, browserLocalPersistence).catch((error) => {
+  console.error("Auth persistence error:", error);
+});
 
 const db = getFirestore(app);
 const storage = getStorage(app);

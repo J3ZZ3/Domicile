@@ -1,11 +1,4 @@
-body {
-    margin: 0;
-    height: 100vh;
-    overflow: hidden;
-}
-
-
-h3 {
+.booking-form-container h3 {
     color: #fff;
     font-family: 'Arial', sans-serif;
     font-size: 2rem;

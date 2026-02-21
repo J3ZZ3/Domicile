@@ -20,16 +20,13 @@ const CustomerBookings = () => {
       }
 
       try {
-        console.log('Fetching bookings for user:', currentUser.uid); // Debug log
-
         const q = query(
           collection(db, 'bookings'),
           where('userId', '==', currentUser.uid),
-          orderBy('createdAt', 'desc') // Sort by creation date, newest first
+          orderBy('createdAt', 'desc')
         );
         
         const querySnapshot = await getDocs(q);
-        console.log('Found bookings:', querySnapshot.size); // Debug log
 
         if (querySnapshot.empty) {
           setBookings([]);
@@ -50,7 +47,6 @@ const CustomerBookings = () => {
           };
         });
 
-        console.log('Processed bookings:', bookingsData); // Debug log
         setBookings(bookingsData);
         setLoading(false);
       } catch (err) {
